@@ -1,18 +1,15 @@
 /**
  * Mr.Wong
  * 201307271042
- * Toolkit 1.0
+ * Toolkit 2.0
  * **/
 
 ;
-(function ($,W,D) {
-    var _t = {};
+(function ($,W,D,T) {
     /**
      * Hide Address
-     * 隐藏地址栏
-     * 初始化项目的时候直接调用即可。
      * **/
-    _t.hideAddress = function () {
+    T.hideAddress = function () {
         var _height = window.screen.height,
             _body = document.getElementsByTagName('body')[0];
         _body.setAttribute('style', 'height:' + _height + 'px');
@@ -23,10 +20,8 @@
     }
     /**
      * Touch event
-     * 触摸事件
-     * 调用时间 obj.on(Touch.start,fn);
      * **/
-    _t.Touch = (function () {
+    T.Touch = (function () {
         var istouch = 'ontouchstart' in window,
             start = istouch ? 'touchstart' : 'mousedown',
             move = istouch ? 'touchmove' : 'mousemove',
@@ -40,10 +35,8 @@
     })();
     /**
      * 版本判断
-     * 在需要加前缀判断的属性面前加 Prefix,如：
-     * tookit.Prefix+transform 在webkit浏览器下输出：-webkit-transform
      * **/
-    _t.Prefix = (function(){
+    T.Prefix = (function(){
         var style = D.createElement('div').style,
             prefixs = ['t','webkitT','mozT','msT'];
         for(var i= 0,len=prefixs.length;i<len;i++){
@@ -56,9 +49,8 @@
     })();
     /**
      * wipe off the event
-     * 阻止事件的默认动作
      * **/
-    _t.PreventDefault = function (e) {
+    T.PreventDefault = function (e) {
         if(e){
             e.preventDefault();
         }else{
@@ -69,9 +61,8 @@
     };
     /**
      * Cookie handle
-     * Cookie操作方法
      */
-    _t.Cookie = {
+    T.Cookie = {
         _add: function (objName, objValue, objDays, Domain) {
             var str = objName + "=" + encodeURIComponent(objValue);
             if (objDays > 0) {
@@ -100,9 +91,8 @@
     };
     /**
      * Location.search handle
-     * url参数获取方法
      * **/
-    _t.QueryString = function (key) {
+    T.QueryString = function (key) {
         var search = window.location.search + '';
         if (search.charAt(0) != '?') {
             return undefined;
@@ -121,7 +111,6 @@
         }
     }
     /**
-     * 获取hash参数的方法
      * Dev:Mr.Wong
      * Hash handle
      * type: 设置hash为获取hash参数，设置search为获取url？后面的参数
@@ -134,7 +123,7 @@
      *  var get = Gethash('search'),
      *      id = get('id');
      * **/
-    _t.GetUrlParam = function (param) {
+    T.GetUrlParam = function (param) {
         var type = param.type,
             keys = param.keys || '';
         switch (type){
@@ -184,9 +173,9 @@
     }
 
     /**
-     * 设置translate的方法
+     * Set transform
      * **/
-    _t.setTransform = function (obj, x, y,type) {
+    T.setTransform = function (obj, x, y,type) {
         if(!obj)return;
         var val_3d = 'translate3d(' + x + type + ',' + y + type + ',' + 0 +')',
             val_2d = 'translate(' + x + type + ',' + y + type + ')';
@@ -198,24 +187,23 @@
     }
     /**
      * Set transition
-     * 设置和删除transition的方法
      * **/
-    _t.setTransition = function(obj,attr,time,type) {
+    T.setTransition = function(obj,attr,time,type) {
         if(!obj)return;
         var val = attr+' '+time+'s '+ (type||'ease-in');
-        if(_t.Prefix == '-webkit-'){
-            obj.style.webkitTransition = attr == 'all'? val:'-'+_t.Prefix +'-'+ val;
-        }else if(_t.Prefix == '-moz-'){
-            obj.style.mozTransition =  attr == 'all'? val:'-'+_t.Prefix +'-'+ val;
-        }else if(_t.Prefix == '-o-'){
-            obj.style.oTransition =  attr == 'all'? val:'-'+_t.Prefix +'-'+ val;
+        if(T.Prefix == '-webkit-'){
+            obj.style.webkitTransition = attr == 'all'? val:'-'+T.Prefix +'-'+ val;
+        }else if(T.Prefix == '-moz-'){
+            obj.style.mozTransition =  attr == 'all'? val:'-'+T.Prefix +'-'+ val;
+        }else if(T.Prefix == '-o-'){
+            obj.style.oTransition =  attr == 'all'? val:'-'+T.Prefix +'-'+ val;
         }else{
             obj.style.transition = val;
         }
         return obj;
 
     }
-    _t.delTransition = function(obj){
+    T.delTransition = function(obj){
         if(!obj)return;
         var val = '';
         obj.style.webkitTransition = val;
@@ -228,16 +216,15 @@
      * CancelBubble
      * 阻止冒泡
      * **/
-    _t.CancelBubble = function(e) {
+    T.CancelBubble = function(e) {
         if (e.stopPropagation) e.stopPropagation();
         else e.cancelBubble = true;
         return e;
     }
     /**
      * OrientationChange
-     * 旋屏事件
      * **/
-    _t.OrientationChange = function(callback){
+    T.OrientationChange = function(callback){
         window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', function () {
             setTimeout(function () {
                 callback&&callback();
@@ -245,7 +232,7 @@
         }, true);
     }
     /**
-     * Dialog 弹窗方法
+     * Dialog
      * dev:Mr.Wong
      * 1.创建一个实例
      * 2.param:(example)
@@ -259,7 +246,7 @@
      *                hoverCb:callback
      *            }
      * **/
-    _t.Dialog = function(param) {
+    T.Dialog = function(param) {
         if (!param || !param.dialogId || !param.dialogClass)return;
         //参数初始化
         var content = param.content || '',
@@ -274,7 +261,7 @@
         document.body.appendChild(dialog);
         if(bgHide.isHide){
             dialog.addEventListener('click',function(){
-                  bgHide.cb();
+                bgHide.cb();
             });
         }
         if (button) {
@@ -296,9 +283,9 @@
         return dialog;
     }
     /**
-     * UA判断方法
+     * UA judge
      * **/
-    _t.UAhandle = (function(){
+    T.UAhandle = (function(){
         var ua = W.navigator.userAgent;
         function isIE(){
             return /MSIE\s([\d.]+)/.test(ua);
@@ -346,20 +333,11 @@
         }
     })();
     /**
-     * Ajax数据获取方法
-     * 调用方法：tookit.DAL.getdata({
-     *     url:必须
-     *     type:可选，默认get
-     *     dataType:可选，默认json
-     *     data：get的时候无需设置
-     *     cache：可选，默认false
-     *     timeout：可选，默认为0
-     *     success：获取成功的回调
-     *     error：获取失败的回调
-     * });
+     * 数据获取方法
+     *
      *
      * **/
-    _t.DAL = (function($){
+    T.DAL = (function($){
         getdata = function(param){
             //判断是否有参数
             if(!param) return false;
@@ -410,11 +388,8 @@
 
     })($);
 
-    /**
-     * requestAnimationFrame 兼容方法
-     *
-     * **/
-    _t.RequestAFrame = (function () {
+    /** requestAnimationFrame 兼容 **/
+    T.RequestAFrame = (function () {
         return W.requestAnimationFrame ||
             W.webkitRequestAnimationFrame ||
             W.mozRequestAnimationFrame ||
@@ -423,12 +398,8 @@
                 return W.setTimeout(callback, 1000 / 60); // shoot for 60 fps
             };
     })();
-
-    /**
-     * cancelAnimationFrame 兼容方法
-     *
-     * **/
-    _t.CancelAFrame = (function () {
+    /** cancelAnimationFrame 兼容 **/
+    T.CancelAFrame = (function () {
         return W.cancelAnimationFrame ||
             W.webkitCancelAnimationFrame ||
             W.mozCancelAnimationFrame ||
@@ -438,12 +409,9 @@
             };
     })();
 
-    /**
-     * 判断浏览器是否支持 CSS 3D特性
-     *
-     * **/
-    _t.has3D = (function(){
-        var browser = _t.UAhandle;
+    /** 判断CSS 3D特性 **/
+    T.has3D = (function(){
+        var browser = T.UAhandle;
         if(browser.isFF() || browser.isQQ()){
             return true;
         }else if(browser.isUC() && browser.isAndroid()){
@@ -452,7 +420,7 @@
             return false;
         }
         var body = D.body, el = D.createElement('div'), has3d = true,
-            transforms = _t.Prefix + 'transform';
+            transforms = T.Prefix + 'transform';
         body.appendChild(el);
         if( el.style[transforms] !== undefined ){
             el.style[transforms] = 'perspective(1000px) rotateY(90deg)';
@@ -462,31 +430,28 @@
         return has3d?true:false;
     });
 
-    /**
-     * APP全屏方法
-     *
-     * **/
-    _t.FullScreen = (function(){
-         return function(clickObj,fullScreenObj){
+    /** APP全屏方法 **/
+    T.FullScreen = (function(){
+        return function(clickObj,fullScreenObj){
             var _clickObj = clickObj.on?clickObj[0]:clickObj,
                 _fullScreenObj = fullScreenObj.on?fullScreenObj[0]:fullScreenObj;//判断是否JQ对象，是则转换成dom对象
 
             _clickObj.addEventListener('click',function(){
                 var rfs = _fullScreenObj.requestFullscreen ? 'requestFullscreen':
-                          _fullScreenObj.mozRequestFullScreen ?'mozRequestFullScreen':
-                          _fullScreenObj.webkitRequestFullscreen ?'webkitRequestFullscreen':
-                          _fullScreenObj.msRequestFullscreen ?'msRequestFullscreen':
-                          null;
+                    _fullScreenObj.mozRequestFullScreen ?'mozRequestFullScreen':
+                        _fullScreenObj.webkitRequestFullscreen ?'webkitRequestFullscreen':
+                            _fullScreenObj.msRequestFullscreen ?'msRequestFullscreen':
+                                null;
 
                 if(rfs){
                     _fullScreenObj[rfs]();
                 }
             });
 
-         }
+        }
     })();
 
-    //TODO _t.CancelFullScreen
+    //TODO T.CancelFullScreen
 
     /** 特性检测
      *
@@ -498,18 +463,18 @@
      *
      * 返回true or false
      * **/
-    _t.CheckCharacter = function (param){
+    T.CheckCharacter = function (param){
         if(!param)return;
         var character = document.getElementsByTagName('html')[0].getAttribute('class').split(' '),
-            param_type = param.constructor+'';
-        if(param_type.indexOf('String') != '-1'){
+            paramType = param.constructor+'';
+        if(paramType.indexOf('String') != '-1'){
             for(var i = 0, len = character.length;i<len;i++){
                 if(param == character[i]){
                     return true;
                 }
             }
             return false;
-        }else if(param_type.indexOf('Array') != '-1'){
+        }else if(paramType.indexOf('Array') != '-1'){
             var pass = [];
             for(var _i= 0,_len=param.length;_i<_len;_i++){
 
@@ -529,6 +494,4 @@
         }
     }
 
-    W.Toolkit = _t;
-
-})($,window,document);
+})($,window,document,window.Toolkit = window.Toolkit || {});
