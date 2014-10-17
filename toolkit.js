@@ -38,9 +38,9 @@
      * **/
     T.Prefix = (function(){
         var style = D.createElement('div').style,
-            prefixs = ['t','webkitT','mozT','msT'];
+            prefixs = ['a','webkitA','mozA','msA'];
         for(var i= 0,len=prefixs.length;i<len;i++){
-            var at = prefixs[i]+'ransform';
+            var at = prefixs[i]+'nimation';
             if(at in style){
                 var pf = prefixs[i].substr(0,prefixs[i].length-1);
                 return pf?'-'+pf+'-':'';
